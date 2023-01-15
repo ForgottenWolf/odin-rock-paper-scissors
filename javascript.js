@@ -1,50 +1,80 @@
 function getComputerChoice() {
-    return Math.floor(Math.random() * (4 - 1) + 1); // pick a number between 3 and 1 (inclusively)
+    let computerChoice = Math.floor(Math.random() * (4 - 1) + 1)
+    updateComputerChoice(computerChoice);
+    return computerChoice; // pick a number between 3 and 1 (inclusively)
 }
+
 function playRound(playerSelection, computerSelection) {
+    const outcome = document.querySelector(".outcome");
+    const score = document.querySelector(".score");
     if (playerSelection === 1) { //rock
         if (computerSelection === 1) {
-            return console.log("You Tie! Both chose Rock");
+            outcome.textContent = "You Tie! Both chose Rock";
         } else if (computerSelection === 2) {
-            return console.log("You loose! Paper beats Rock");
+            outcome.textContent = "You loose! Paper beats Rock";
+            computerScore += 1;
         } else {
-            return console.log("You win. Rock beats Scissors");
+            outcome.textContent = "You win. Rock beats Scissors";
+            userScore += 1;
         }
     }
     if (playerSelection === 2) { //paper
         if (computerSelection === 2) {
-            return console.log("You Tie! Both chose paper");
+            outcome.textContent = "You Tie! Both chose paper";
         } else if (computerSelection === 3) {
-            return console.log("You loose! Scissors beats Paper");
+            outcome.textContent = "You loose! Scissors beats Paper";
+            computerScore += 1;
         } else {
-            return console.log("You win. Paper beats Rock");
+            outcome.textContent = "You win. Paper beats Rock";
+            userScore += 1;
         }
     }
     if (playerSelection === 3) { //scissors
         if (computerSelection === 3) {
-            return console.log("You Tie! Both chose Scissors");
+            outcome.textContent = "You Tie! Both chose Scissors";
         } else if (computerSelection === 1) {
-            return console.log("You loose! Rock beats Scissors");
+            outcome.textContent = "You loose! Rock beats Scissors";
+            computerScore += 1;
         } else {
-            return console.log("You win. Scissors beats Paper");
+            outcome.textContent = "You win. Scissors beats Paper"
+            userScore += 1;
         }
     }
+    score.textContent = userScore + "-" + computerScore;
 }
-function getUserInput() {
-    let userTextInput = "InvalidInput";
-    while (userTextInput === "InvalidInput") {
-        userTextInput = prompt("Type rock, paper, or scissors").toLowerCase();
-        if (userTextInput === "rock") {
-            return 1;
-        } else if (userTextInput === "paper") {
-            return 2;
-        } else if (userTextInput === "scissors") {
-            return 3;
-        } else { userTextInput = "InvalidInput" }
+
+function getUserInput(userInput) {
+    userInput = userInput.target.className;
+    updateUserChoice(userInput)
+    let userNum;
+    if (userInput === "rock") {
+        userNum = 1;
+    } else if (userInput === "paper") {
+        userNum = 2;
+    } else if (userInput === "scissors") {
+        userNum = 3;
     }
+    playRound(userNum, getComputerChoice())
 }
-function game() {
-    for (let i = 0; i < 5; i++) {
-        playRound(getUserInput(), getComputerChoice());
+
+function updateUserChoice(userInput) {
+    const userChoice = document.querySelector(".userChoice");
+    userChoice.textContent = "You choose: " + userInput;
+}
+
+function updateComputerChoice(computerChoice) {
+    if (computerChoice === 1) {
+        computerChoice = "rock"
+    } else if (computerChoice === 2) {
+        computerChoice = "paper"
+    } else if (computerChoice === 3) {
+        computerChoice = "scissors"
     }
+    const computerChoice2 = document.querySelector(".computerChoice");
+    computerChoice2.textContent = "Computer choose: " + computerChoice;
 }
+
+const buttons = document.querySelectorAll(".buttons");
+buttons.forEach(button => button.addEventListener("click", getUserInput));
+let userScore = 0;
+let computerScore = 0;
